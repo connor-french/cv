@@ -83,7 +83,7 @@ Disclaimer {#disclaimer}
 
 Made with the R package [**pagedown**](https://github.com/rstudio/pagedown). 
 
-The source code is available [on github.com/nstrayer/cv](https://github.com/connor-french/cv).
+The source code is available [on github.com/connor-french/cv](https://github.com/connor-french/cv).
 
 Last updated on `r Sys.Date()`.
 
@@ -168,34 +168,42 @@ CV %<>% print_section('data_science_writings')
 
 
 
-Selected Press (About)  {data-icon=newspaper}
---------------------------------------------------------------------------------
+<!-- Selected Press (About)  {data-icon=newspaper} -->
+<!-- -------------------------------------------------------------------------------- -->
 
-```{r}
-CV %<>% print_section('about_me_press')
-```
-
-
-<br>
-<br>
+<!-- ```{r} -->
+<!-- CV %<>% print_section('about_me_press') -->
+<!-- ``` -->
 
 
-Selected Press (By)  {data-icon=newspaper}
---------------------------------------------------------------------------------
-
-```{r}
-CV %<>% print_section('by_me_press')
-```
+<!-- <br> -->
+<!-- <br> -->
 
 
+<!-- Selected Press (By)  {data-icon=newspaper} -->
+<!-- -------------------------------------------------------------------------------- -->
 
-Selected Publications, Posters, and Talks {data-icon=book}
+<!-- ```{r} -->
+<!-- CV %<>% print_section('by_me_press') -->
+<!-- ``` -->
+
+
+
+Selected Publications {data-icon=book}
 --------------------------------------------------------------------------------
 
 ```{r}
 CV %<>% print_section('academic_articles')
 ```
 
+
+Selected Talks and Posters {data-icon=volume-up}
+--------------------------------------------------------------------------------
+
+
+```{r}
+CV %<>% print_section('presentations_posters')
+```
 
 
 ```{r}
