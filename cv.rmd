@@ -212,10 +212,6 @@ CV %<>% print_section('presentations_posters')
 ```
 
 
-```{r}
-CV %<>% print_links()
-```
-
 Peer Review {data-icon=pencil-square-o}
 --------------------------------------------------------------------------------
 
@@ -259,4 +255,7 @@ Affiliations {data-icon=check}
 CV %<>% print_section('affiliations')
 ```
 
+```{r}
+CV %<>% print_links()
+```
 
