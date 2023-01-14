@@ -1,4 +1,4 @@
 ## CV
 
-My CV based on a template by [Nick Strayer](https://github.com/nstrayer).  
+My personal CV. Full CV is in the `cv_modern/` folder. Created using the `vitae` R package and the `Awesome CV` template.  
 

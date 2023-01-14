@@ -1,0 +1,187 @@
+---
+name: Connor
+surname: French
+address: "Montclair, NJ"
+phone: 972 768 2025
+www: connor-french.com
+email: "french.connor.m@gmail.com"
+twitter: frog_phylo
+github: connor-french
+linkedin: connormfrench
+date: "`r format(Sys.time(), '%B %Y')`"
+headcolor: 414141
+output: vitae::awesomecv
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE)
+library(vitae)
+library(googlesheets4)
+library(magrittr)
+library(rvest)
+library(httr)
+library(glue)
+library(dplyr)
+
+cv_data <- googlesheets4::read_sheet("https://docs.google.com/spreadsheets/d/1_-FwA_gPivAbhd0pmku-ps6jOqQQqPQzhPYEagJS9t8/edit?usp=sharing", skip = 1) |> 
+  mutate(end = unlist(end) |> 
+           stringr::str_replace("current", format(Sys.Date(), "%Y")) |> 
+           as.numeric()
+         )
+           
+```
+
+```{r get-bib, include=FALSE}
+# adapted from: https://rdrr.io/github/srvanderplas/GoogleScholarScrapeR/src/R/Scrape.R
+
+# not using this for now because it's a headache, but leaving it here in case I want to use it in the future
+
+# get_bibtex <- function(scholar_link) {
+#   b <- session(scholar_link) |>
+#     extract2('response') |>
+#     as.character() |>
+#     extract(1) |>
+#     as.character()
+# 
+#   b
+# }
+```
+
+
+# Education
+
+```{r education}
+cv_data |>
+  filter(section == "education") |>
+  detailed_entries(
+    what = title,
+    when = ifelse(!is.na(start), glue("{start} - {end}", .na = ""), end),
+    with = institution,
+    where = loc
+  )
+```
+
+# Relevant Professional Experience
+
+```{r experience}
+cv_data |> 
+  filter(section == "research_positions",
+         title != "Graduate Research Assistant") |>
+  arrange(desc(end)) |> 
+  slice_head(n=2) |> 
+  detailed_entries(
+    with = title,
+    what = loc,
+    why = c(unlist(description_1), description_2, description_3),
+    when = ifelse(!is.na(start), glue("{start} - {end}", .na = ""), end),
+    where = institution
+  )
+```
+
+
+# Recent Publications
+
+```{r publications}
+
+cv_data |> 
+  filter(section == "preprints" | section == "academic_articles") |> 
+  arrange(desc(end)) |> 
+  slice_head(n=5) |> 
+  detailed_entries(
+    with = glue::glue("{title} ({end})"),
+    what = glue("{loc}. {unlist(description_1)} {description_2}", .na = ""),
+    where = institution
+  )
+```
+
+# Recent Presentations
+
+```{r presentations}
+cv_data |> 
+  filter(section == "presentations_posters") |> 
+  arrange(desc(end)) |> 
+  slice_head(n=5) |> 
+  detailed_entries(
+    with = title,
+    what = glue("{loc}. {unlist(description_1)}"),
+    when = ifelse(!is.na(start), glue("{start} - {end}", .na = ""), end),
+    where = institution
+  )
+```
+
+# Recent Teaching
+
+```{r teaching}
+cv_data |> 
+  filter(section == "teaching_positions") |> 
+  arrange(desc(end)) |> 
+  slice_head(n=5) |> 
+  detailed_entries(
+    with = title,
+    what = glue("{loc}. {unlist(description_1)}"),
+   # why = c(unlist(description_1), description_2, description_3),
+    when = ifelse(!is.na(start), glue("{start} - {end}", .na = ""), end),
+    where = institution
+  )
+```
+
+# Recent Awards and Honors
+
+```{r awards}
+cv_data |> 
+  filter(section == "awards_honors") |> 
+  arrange(desc(end)) |> 
+  slice_head(n=5) |> 
+  detailed_entries(
+    with = glue("{title} (${unlist(description_1)})"),
+    what = loc,
+    #why = c(glue("$", unlist(description_1)), description_2, description_3),
+    when = ifelse(!is.na(start), glue("{start} - {end}", .na = ""), end),
+    where = institution
+  )
+```
+
+# Recent Outreach
+
+```{r outreach}
+cv_data |> 
+  filter(section == "outreach") |> 
+  arrange(desc(end)) |> 
+  slice_head(n=3) |> 
+  detailed_entries(
+    with = title,
+    what = glue("{loc}. {unlist(description_1)}"),
+    when = ifelse(!is.na(start), glue("{start} - {end}", .na = ""), end),
+    where = institution
+  )
+```
+
+# Technical Skills 
+
+```{r techtable}
+# taken from https://github.com/akirosingh/CV/blob/master/CV.Rmd
+library(kableExtra)
+
+tibble::tribble(
+   ~Frameworks, ~Software,
+  "R, Python, SQL, QGIS, ArcGIS, Unix shell, Microsoft Office, High-Performance Computing",
+  "Git, tidyverse, tidymodels, Quarto, Shiny, msprime, sklearn, SLiM, conda, snakemake, common bioinformatics tools"
+) %>%
+  kable(booktabs = T, align = 'c', escape = F, format = "latex") %>%
+  kable_styling(full_width = F, font_size = 9,latex_options = "hold_position") %>% 
+  row_spec(0, bold = T, color = "#414141") %>% 
+  row_spec(1, bold = F, color = "#7f7f7f") %>% 
+  column_spec(column = 1:3, width = '4.75cm')
+```
+
+# Peer Review
+
+```{r peer-review}
+cv_data |> 
+  filter(section == "peer_review") |> 
+  arrange(desc(end)) |> 
+  brief_entries(
+    what = title
+  )
+```
+
