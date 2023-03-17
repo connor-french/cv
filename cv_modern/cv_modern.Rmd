@@ -1,6 +1,7 @@
 ---
 name: Connor
 surname: French
+position: PhD Candidate
 address: "Montclair, NJ"
 phone: 972 768 2025
 www: connor-french.com
